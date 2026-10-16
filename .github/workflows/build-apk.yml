@@ -1,0 +1,72 @@
+name: Build Retro-Matic 74 Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java JDK 17 for Android Build
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Dependencies & Add Android Platform
+        run: |
+          npm install
+          npx cap add android || true
+          node setup-android-permissions.js
+          npx cap sync android
+
+      - name: Build Release APK via Gradle
+        working-directory: ./android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Sign & Verify Release APK (V1 + V2)
+        run: |
+          BUILD_TOOLS_PATH=$(find $ANDROID_HOME/build-tools -name apksigner | sort -V | tail -n 1)
+          BUILD_TOOLS_DIR=$(dirname "$BUILD_TOOLS_PATH")
+          echo "Found Android Build Tools at: $BUILD_TOOLS_DIR"
+
+          RELEASE_DIR="android/app/build/outputs/apk/release"
+          FINAL_APK="$RELEASE_DIR/RetroMatic-74-Release.apk"
+
+          if [ -f "$RELEASE_DIR/app-release-unsigned.apk" ]; then
+            echo "Processing unsigned release APK..."
+            "$BUILD_TOOLS_DIR/zipalign" -v -p 4 "$RELEASE_DIR/app-release-unsigned.apk" "$FINAL_APK"
+            "$BUILD_TOOLS_DIR/apksigner" sign --ks release-key.jks --ks-key-alias release-key --ks-pass pass:retromatic123 --key-pass pass:retromatic123 --v1-signing-enabled true --v2-signing-enabled true "$FINAL_APK"
+          elif [ -f "$RELEASE_DIR/app-release.apk" ]; then
+            echo "Processing Gradle-signed release APK..."
+            cp "$RELEASE_DIR/app-release.apk" "$FINAL_APK"
+            "$BUILD_TOOLS_DIR/apksigner" sign --ks release-key.jks --ks-key-alias release-key --ks-pass pass:retromatic123 --key-pass pass:retromatic123 --v1-signing-enabled true --v2-signing-enabled true "$FINAL_APK"
+          else
+            echo "Error: No release APK found in $RELEASE_DIR"
+            ls -la "$RELEASE_DIR" || true
+            exit 1
+          fi
+
+          echo "=== Verifying APK Signature (V1 + V2 Scheme) ==="
+          "$BUILD_TOOLS_DIR/apksigner" verify --verbose "$FINAL_APK"
+
+      - name: Upload Signed Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Retro-Matic-74-Release-APK
+          path: android/app/build/outputs/apk/release/RetroMatic-74-Release.apk

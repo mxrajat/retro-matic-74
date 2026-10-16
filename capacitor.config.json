@@ -1,0 +1,9 @@
+{
+  "appId": "com.retromatic74.camera",
+  "appName": "RetroMatic 74",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}

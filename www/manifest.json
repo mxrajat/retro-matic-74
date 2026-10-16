@@ -1,0 +1,10 @@
+{
+  "name": "RETRO-MATIC '74 Camera",
+  "short_name": "RetroCam74",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1c1b1a",
+  "theme_color": "#1c1b1a",
+  "description": "1970s Lo-Fi Gen-Z Aesthetic Photo & Super-8 Video Camera"
+}

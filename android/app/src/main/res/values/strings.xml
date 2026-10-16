@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">RetroMatic 74</string>
+    <string name="title_activity_main">RetroMatic 74</string>
+    <string name="package_name">com.retromatic74.camera</string>
+    <string name="custom_url_scheme">com.retromatic74.camera</string>
+</resources>
