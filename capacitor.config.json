@@ -1,6 +1,6 @@
 {
-  "appId": "com.retromatic74.camera",
-  "appName": "RetroMatic 74",
+  "appId": "com.craftcam.lofi",
+  "appName": "CraftCam",
   "webDir": "www",
   "bundledWebRuntime": false,
   "android": {

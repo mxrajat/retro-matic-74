@@ -1,4 +1,4 @@
-name: Build & Release Retro-Matic 74 Android APK
+name: Build & Release CraftCam Android APK
 
 on:
   push:
@@ -54,16 +54,16 @@ jobs:
           echo "Found Android Build Tools at: $BUILD_TOOLS_DIR"
 
           RELEASE_DIR="android/app/build/outputs/apk/release"
-          FINAL_APK="$RELEASE_DIR/RetroMatic-74-Release.apk"
+          FINAL_APK="$RELEASE_DIR/CraftCam-Signed-Release.apk"
 
           if [ -f "$RELEASE_DIR/app-release-unsigned.apk" ]; then
             echo "Processing unsigned release APK..."
             "$BUILD_TOOLS_DIR/zipalign" -v -p 4 "$RELEASE_DIR/app-release-unsigned.apk" "$FINAL_APK"
-            "$BUILD_TOOLS_DIR/apksigner" sign --ks release-key.jks --ks-key-alias release-key --ks-pass pass:retromatic123 --key-pass pass:retromatic123 --v1-signing-enabled true --v2-signing-enabled true "$FINAL_APK"
+            "$BUILD_TOOLS_DIR/apksigner" sign --ks release-key.jks --ks-key-alias craftcam --ks-pass pass:craftcam123 --key-pass pass:craftcam123 --v1-signing-enabled true --v2-signing-enabled true "$FINAL_APK"
           elif [ -f "$RELEASE_DIR/app-release.apk" ]; then
             echo "Processing Gradle-signed release APK..."
             cp "$RELEASE_DIR/app-release.apk" "$FINAL_APK"
-            "$BUILD_TOOLS_DIR/apksigner" sign --ks release-key.jks --ks-key-alias release-key --ks-pass pass:retromatic123 --key-pass pass:retromatic123 --v1-signing-enabled true --v2-signing-enabled true "$FINAL_APK"
+            "$BUILD_TOOLS_DIR/apksigner" sign --ks release-key.jks --ks-key-alias craftcam --ks-pass pass:craftcam123 --key-pass pass:craftcam123 --v1-signing-enabled true --v2-signing-enabled true "$FINAL_APK"
           else
             echo "Error: No release APK found in $RELEASE_DIR"
             ls -la "$RELEASE_DIR" || true
@@ -76,27 +76,27 @@ jobs:
       - name: Upload Build Artifact (Backup)
         uses: actions/upload-artifact@v4
         with:
-          name: Retro-Matic-74-Release-APK
-          path: android/app/build/outputs/apk/release/RetroMatic-74-Release.apk
+          name: CraftCam-Signed-APK
+          path: android/app/build/outputs/apk/release/CraftCam-Signed-Release.apk
 
       - name: Publish to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.app_version.outputs.VERSION }}
-          name: "Retro-Matic '74 v${{ steps.app_version.outputs.VERSION }}"
+          name: "CraftCam v${{ steps.app_version.outputs.VERSION }}"
           body: |
-            ## 📸 Retro-Matic '74 — Official Android Release
+            ## 📸 CraftCam — Official Minecraft UI Gen-Z Lo-Fi Camera Release
 
-            ### ✨ Highlights:
-            - **App:** 1970s Vintage Lo-Fi Photo & Super-8 Video Camera
-            - **Version:** v${{ steps.app_version.outputs.VERSION }}
+            ### ✨ What's New in v${{ steps.app_version.outputs.VERSION }}:
+            - **App:** CraftCam (Minecraft UI Gen-Z Lo-Fi Camera)
+            - **Feature:** Instant Gallery Auto-Saver (`DCIM/CraftCam`)
             - **Signatures:** Verified V1 (JAR) + V2 (Full APK Signature)
-            - **Security:** Play Protect Certified (No harmful app warnings)
+            - **Play Protect:** Verified clean release (No harmful app warnings)
 
             ### 📲 Installation:
-            Niche **Assets** section se **`RetroMatic-74-Release.apk`** download karein aur apne Android phone me install karein!
+            Niche **Assets** section se **`CraftCam-Signed-Release.apk`** download karein aur phone me install karein!
           files: |
-            android/app/build/outputs/apk/release/RetroMatic-74-Release.apk
+            android/app/build/outputs/apk/release/CraftCam-Signed-Release.apk
           draft: false
           prerelease: false
           generate_release_notes: true

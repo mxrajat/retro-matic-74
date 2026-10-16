@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.retromatic74.camera"
+    namespace "com.craftcam.lofi"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.retromatic74.camera"
+        applicationId "com.craftcam.lofi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -23,9 +23,9 @@ android {
                 ksFile = file("${rootDir}/../release-key.jks")
             }
             storeFile ksFile
-            storePassword 'retromatic123'
-            keyAlias 'release-key'
-            keyPassword 'retromatic123'
+            storePassword 'craftcam123'
+            keyAlias 'craftcam'
+            keyPassword 'craftcam123'
             v1SigningEnabled true
             v2SigningEnabled true
         }

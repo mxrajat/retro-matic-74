@@ -1,12 +1,11 @@
 {
-  "name": "retro-matic-74",
-  "version": "2.0.0",
-  "description": "1970s Retro Lo-Fi Photo & Super-8 Video Camera App",
+  "name": "craft-cam-lofi",
+  "version": "3.0.0",
+  "description": "Minecraft UI Gen-Z Lo-Fi Camera with Instant Auto-Save",
   "main": "www/index.html",
   "scripts": {
     "init:android": "npx cap add android && node setup-android-permissions.js && npx cap sync android",
-    "sync": "npx cap sync android",
-    "open:android": "npx cap open android"
+    "sync": "npx cap sync android"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",
