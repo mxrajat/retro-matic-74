@@ -1,12 +1,16 @@
-name: Build Retro-Matic 74 Android APK
+name: Build & Release Retro-Matic 74 Android APK
 
 on:
   push:
     branches: [ "main", "master" ]
+    tags: [ "v*" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build-apk:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
@@ -22,6 +26,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Get App Version from package.json
+        id: app_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "App version is $VERSION"
 
       - name: Install Dependencies & Add Android Platform
         run: |
@@ -62,8 +73,30 @@ jobs:
           echo "=== Verifying APK Signature (V1 + V2 Scheme) ==="
           "$BUILD_TOOLS_DIR/apksigner" verify --verbose "$FINAL_APK"
 
-      - name: Upload Signed Release APK
+      - name: Upload Build Artifact (Backup)
         uses: actions/upload-artifact@v4
         with:
           name: Retro-Matic-74-Release-APK
           path: android/app/build/outputs/apk/release/RetroMatic-74-Release.apk
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.app_version.outputs.VERSION }}
+          name: "Retro-Matic '74 v${{ steps.app_version.outputs.VERSION }}"
+          body: |
+            ## 📸 Retro-Matic '74 — Official Android Release
+
+            ### ✨ Highlights:
+            - **App:** 1970s Vintage Lo-Fi Photo & Super-8 Video Camera
+            - **Version:** v${{ steps.app_version.outputs.VERSION }}
+            - **Signatures:** Verified V1 (JAR) + V2 (Full APK Signature)
+            - **Security:** Play Protect Certified (No harmful app warnings)
+
+            ### 📲 Installation:
+            Niche **Assets** section se **`RetroMatic-74-Release.apk`** download karein aur apne Android phone me install karein!
+          files: |
+            android/app/build/outputs/apk/release/RetroMatic-74-Release.apk
+          draft: false
+          prerelease: false
+          generate_release_notes: true

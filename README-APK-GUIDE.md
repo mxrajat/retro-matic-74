@@ -4,6 +4,14 @@ Is folder me aapka complete **Photo + Super-8 Video** app (`www/index.html`), **
 
 ---
 
+## 🚀 DOWNLOAD READY APK (GITHUB RELEASES)
+Har push ke baad GitHub automatically signed APK bana kar **Releases** me dal deta hai:
+👉 **[Download Latest APK from Releases](https://github.com/mxrajat/retro-matic-74/releases)**
+
+Wahan se `RetroMatic-74-Release.apk` direct download karein aur phone me install kar lein!
+
+---
+
 ## 🔑 RELEASE KEYSTORE DETAILS
 * **Keystore File:** `release-key.jks` (Root & `android/app/`)
 * **Key Alias:** `release-key`
@@ -14,15 +22,7 @@ Is folder me aapka complete **Photo + Super-8 Video** app (`www/index.html`), **
 
 ---
 
-## TAREEKA 1: GitHub Cloud Build se Release APK Download karein (Recommended)
-1. Repository GitHub par pushed hai: `https://github.com/mxrajat/retro-matic-74`
-2. GitHub repo ke **Actions** tab me jayein -> **Build Retro-Matic 74 Android APK** workflow dekhein.
-3. Build complete hone par niche **Artifacts** me **`Retro-Matic-74-Release-APK`** par click karein aur download karein.
-4. Downloaded zip ko extract karke `RetroMatic-74-Release.apk` ko phone me install karein!
-
----
-
-## TAREEKA 2: Local Terminal / Android SDK se Build karein
+## 🛠️ LOCAL BUILD (Agar PC par build karna ho)
 1. Dependencies install aur sync karein:
    ```bash
    npm install
